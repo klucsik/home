@@ -1,0 +1,9 @@
+# helm upgrade --install longhorn longhorn/longhorn -f longhorn/values.yaml --namespace longhorn-system --create-namespace
+# kubectl create secret generic basic-auth --from-file=longhorn/auth --namespace longhorn-system
+# kubectl apply -f longhorn/longhorn-ingress.yaml
+# helm uninstall longhorn --namespace longhorn-system
+csi:
+  kubeletRootDir: /var/snap/microk8s/common/var/lib/kubelet
+defaultSettings:
+  backupTarget: nfs://192.168.100.144:/data/longhornbackup
+  nodeDownPodDeletionPolicy: delete-both-statefulset-and-deployment-pod

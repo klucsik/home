@@ -1,0 +1,15 @@
+
+- name: Add chart repo
+  kubernetes.core.helm_repository:
+    name: k8s-at-home
+    repo_url: "https://k8s-at-home.com/charts/"
+
+- name: Deploy foundry instance
+  kubernetes.core.helm:
+    name: foundryvtt
+    state: present
+    chart_ref: k8s-at-home/foundryvtt
+    chart_version: 3.4.2
+    values: "{{ lookup('template', 'values.yaml.j2') | from_yaml  }}"
+    release_namespace: '{{ foundry_namespace }}'
+    create_namespace: true

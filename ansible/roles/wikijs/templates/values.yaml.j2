@@ -1,0 +1,16 @@
+ingress:
+  enabled: true
+  hosts:
+    - host: '{{ instance_name }}-wiki.klucsik.fun'
+      paths:
+        - path: "/"
+          pathType: Prefix
+  tls:
+    - secretName: wildcard.klucsik.fun-tls
+      hosts:
+        - '{{ instance_name }}-wiki.klucsik.fun'
+postgresql:
+  enabled: false
+  postgresqlHost: 'wiki-svc-db'
+  existingSecret: postgres-credentials
+  postgresqlDatabase: 'wiki-db'

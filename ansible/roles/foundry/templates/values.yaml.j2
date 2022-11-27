@@ -1,0 +1,72 @@
+image:
+  repository: felddy/foundryvtt
+  tag: '{{ foundry_version }}'
+
+service:
+  sec:
+    # -- Enables or disables the service
+    enabled: true
+
+    # -- Make this the primary service (used in probes, notes, etc...).
+    # If there is more than 1 service, make sure that only 1 service is marked as primary.
+    primary: false
+
+    # -- Set the service type
+    type: NodePort
+    # -- Provide additional annotations which may be required.
+    annotations: {}
+
+    # -- Provide additional labels which may be required.
+    labels: {}
+
+    # -- Configure the Service port information here.
+    # Additional ports can be added by adding a dictionary key similar to the 'http' service.
+    # @default -- See below
+    ports:
+      nodeport:
+        # -- Enables or disables the port
+        enabled: true
+
+        # -- Make this the primary port (used in probes, notes, etc...)
+        # If there is more than 1 service, make sure that only 1 port is marked as primary.
+        primary: false
+
+        # -- The port number
+        port: '{{ port_number }}'
+
+        # -- Port protocol.
+        # Support values are `HTTP`, `HTTPS`, `TCP` and `UDP`.
+        # HTTPS and HTTPS spawn a TCP service and get used for internal URL and name generation
+        protocol: HTTP
+
+        # -- Specify a service targetPort if you wish to differ the service port from the application port.
+        # If `targetPort` is specified, this port number is used in the container definition instead of
+        # the `port` value. Therefore named ports are not supported for this field.
+        targetPort: 30000
+
+        # -- Specify the nodePort value for the LoadBalancer and NodePort service types.
+        # [[ref]](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport)
+        nodePort: '{{ port_number }}'
+
+persistence:
+  data:
+    enabled: true
+    storageclass: "longhorn-2"
+    size: 20Gi
+    retain: true
+    accessMode: ReadWriteOnce
+    mountPath: /data
+    existingClaim: '{{ existing_claim }}'
+
+
+env:
+  FOUNDRY_USERNAME: '{{ username }}'
+  FOUNDRY_PASSWORD: '{{ user_password }}'
+  CONTAINER_CACHE: /data/container_cache
+  FOUNDRY_HOSTNAME: gyongyvilag-foundry.klucsik.fun
+  FOUNDRY_LICENSE_KEY: '{{ licence_key }}'
+  FOUNDRY_ADMIN_KEY: '{{ admin_key }}'
+  CONTAINER_PRESERVE_CONFIG: true
+  FOUNDRY_MINIFY_STATIC_FILES: true
+  CONTAINER_VERBOSE: true
+  CONTAINER_PRESERVE_CONFIG: true

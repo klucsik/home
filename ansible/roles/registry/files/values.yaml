@@ -1,0 +1,21 @@
+# helm upgrade --install --namespace registry --create-namespace --values registry/registry-values.yaml registry twuni/docker-registry
+ingress:
+  enabled: true
+  className: public
+  hosts: 
+   -  registry.klucsik.fun
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 1g
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+  tls:
+    - hosts:
+        - registry.klucsik.fun
+      secretName: wildcard.klucsik.fun-tls
+
+image:
+  pullPolicy: IfNotPresent
+  tag: 2.8.1
+persistence:
+  enabled: true
+  size: 30Gi
+  existingClaim: registry-volume

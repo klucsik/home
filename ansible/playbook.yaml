@@ -1,0 +1,43 @@
+- name: Deploy longhorn storage system
+  hosts: localhost
+  roles:
+  - longhorn
+
+- name: Deploy bazs foundry instance
+  hosts: localhost
+  roles:
+  - foundry
+  vars_files:
+  - roles/foundry/vars/bazs-vault.yaml
+  - roles/foundry/vars/bazs.yaml
+
+- name: Deploy gyongy foundry instance
+  hosts: localhost
+  roles:
+  - foundry
+  vars_files:
+  - roles/foundry/vars/gyongy-vault.yaml
+  - roles/foundry/vars/gyongy.yaml
+
+- name: Deploy rosurces which doesn't need specific vars
+  hosts: localhost
+  roles:
+  - tarolo
+  - registry
+  - jenkins
+  - pgadmin
+
+- name: Deploy yrelia wiki instance
+  hosts: localhost
+  roles:
+  - wikijs
+  vars_files:
+  - roles/wikijs/vars/yrelia-vars.yml
+
+- name: Deploy tls certs
+  hosts: localhost
+  roles:
+  - tls-secret
+  vars_files:
+  - roles/tls-secret/vars/dotfun_vault.yaml
+

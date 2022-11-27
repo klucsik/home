@@ -1,0 +1,15 @@
+
+- name: Add chart repo
+  kubernetes.core.helm_repository:
+    name: twuni 
+    repo_url: "https://helm.twun.io"
+
+- name: Deploy nextcloud instance
+  kubernetes.core.helm:
+    name: registry
+    state: present
+    chart_ref: twuni/docker-registry
+    chart_version: 2.2.2
+    values: "{{ lookup('file', 'values.yaml') | from_yaml  }}"
+    release_namespace: registry
+    create_namespace: true

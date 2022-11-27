@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: haproxy-lan
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    nginx.ingress.kubernetes.io/app-root: '/stats'
+spec:
+  rules:
+    - host: haproxy.lan
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: haproxy-external-ip
+                port:
+                  number: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: haproxy-external-ip
+  namespace: default
+spec:
+  ports:
+    - name: haproxy
+      port: 80
+      protocol: TCP
+      targetPort: 82
+  clusterIP: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: haproxy-external-ip
+  namespace: default
+subsets:
+  - addresses:
+      - ip: 192.168.100.1
+    ports:
+      - name: haproxy
+        port: 82
+        protocol: TCP

@@ -1,0 +1,20 @@
+- name: Add chart repo
+  kubernetes.core.helm_repository:
+    name: nextcloud
+    repo_url: "https://nextcloud.github.io/helm/"
+
+- name: Deploy nextcloud instance
+  kubernetes.core.helm:
+    name: tarolo
+    state: present
+    chart_ref: nextcloud/nextcloud
+    chart_version: 3.3.3
+    values: "{{ lookup('template', 'values.yaml.j2') | from_yaml  }}"
+    release_namespace: tarolo
+    create_namespace: true
+
+- name: Deploy postgresql-db - deployment
+  kubernetes.core.k8s:
+    state: present
+    namespace: tarolo
+    src: files/psql-deployment.yaml

@@ -1,0 +1,7 @@
+namespaces:
+  - tarolo
+  - longhorn-system
+  - registry
+  - jenkins
+  - yrelia-wiki
+  - pgadmin

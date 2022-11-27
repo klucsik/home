@@ -1,0 +1,56 @@
+# helm upgrade --install jenkins jenkins/jenkins --namespace jenkins --create-namespace -f jenkins/jenkins-values.yml
+# helm uninstall jenkins --namespace jenkins
+controller:
+  ingress:
+    enabled: yes
+    apiVersion: networking.k8s.io/v1
+    ingressClassName: public
+    annotations:
+      nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: jenkins
+            port:
+              number: 8080
+    hostName: jenkins.klucsik.fun
+    tls:
+    - hosts:
+        - jenkins.klucsik.fun
+      secretName: wildcard.klucsik.fun-tls
+
+  imagePullPolicy: IfNotPresent
+  nodeSelector:
+    kubernetes.io/arch: "amd64"
+
+  initializeOnce: true #since we have persistence, doesnt need to init every time
+  installPlugins: 
+    - kubernetes
+    - workflow-aggregator
+    - git
+    - configuration-as-code
+
+  probes:
+    startupProbe:
+      failureThreshold: 30
+    livenessProbe:
+      failureThreshold: 30
+    readinessProbe:
+      failureThreshold: 30
+
+  JCasC:
+    configScripts:
+      welcome-message: |
+        jenkins:
+          systemMessage: Üdv Krisz Jenkinsén!
+persistence:
+  enabled: true
+  storageClass: longhorn-2
+
+
+
+agent:
+  enabled: false

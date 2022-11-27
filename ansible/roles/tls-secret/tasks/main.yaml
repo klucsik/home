@@ -1,0 +1,15 @@
+- name: update tls secrets
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'tls-secret.yaml.j2') | from_yaml }}"
+    namespace: '{{ item }}'
+  with_items: '{{ namespaces }}'
+  ignore_errors: true
+
+- name: add basic auth secret in namespace
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'auth.yaml.j2') | from_yaml }}"
+    namespace: '{{ item }}'
+  with_items: '{{ namespaces }}'
+  ignore_errors: true

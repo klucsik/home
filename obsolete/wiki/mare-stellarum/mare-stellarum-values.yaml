@@ -1,0 +1,13 @@
+ingress:
+  enabled: true
+  hosts:
+    - host: mare-stellarum-wiki.klucsik.fun
+      paths:
+        - path: "/"
+          pathType: Prefix
+
+postgresql:
+  enabled: false
+  postgresqlHost: wiki-svc-db
+  existingSecret: postgres-credentials
+  postgresqlDatabase: wiki-db

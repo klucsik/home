@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: basic-auth
+data:
+  auth: '{{ basic_auth_creds }}'
+type: Opaque
+

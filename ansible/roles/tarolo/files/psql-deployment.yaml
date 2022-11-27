@@ -1,0 +1,98 @@
+---
+# kind: PersistentVolumeClaim
+# apiVersion: v1
+# metadata:
+#   name: postgresql-db
+  
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 20Gi
+#   storageClassName: longhorn-2
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tarolo-svc-db
+  
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    type: database
+---
+#db
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tarolo-db
+  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      type: database
+  template:
+    metadata:
+      labels:
+        type: database
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:14
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: postgres_user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: postgresql-password
+            - name: POSTGRES_DB # Setting Database Name from a 'ConfigMap'
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-conf
+                  key: name
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgredb
+              subPath: postgres
+      volumes:
+        - name: postgredb
+          persistentVolumeClaim:
+            claimName: tarolo-db
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-credentials
+  
+data:
+  postgres_user: cG9zdGdyZXM=
+  postgresql-password: cG9zdGdyZXM=
+  secretKey: cG9zdGdyZXM=
+
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-conf
+  
+  labels:
+    type: database
+data:
+  host: tarolo-svc-db #The db service name
+  name: tarolo-db

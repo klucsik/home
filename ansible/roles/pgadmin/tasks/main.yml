@@ -1,0 +1,16 @@
+---
+# tasks file for pgadmin
+- name: Add chart repo
+  kubernetes.core.helm_repository:
+    name: runix
+    repo_url: "https://helm.runix.net"
+
+- name: Deploy PGAdmin instance
+  kubernetes.core.helm:
+    name: pgadmin
+    state: present
+    chart_ref: runix/pgadmin4
+    chart_version: 1.13.6
+    values: "{{ lookup('template', 'values.yaml.j2') | from_yaml  }}"
+    release_namespace: pgadmin
+    create_namespace: true

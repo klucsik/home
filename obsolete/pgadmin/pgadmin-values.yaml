@@ -1,0 +1,32 @@
+#helm repo add runix https://helm.runix.net
+# helm upgrade --install -f pgadmin/pgadmin-values.yaml pgadmin runix/pgadmin4
+ingress:
+  enabled: true
+  ingressClassName: public
+  hosts:
+    - host: pgadmin.klucsik.fun
+      paths:
+        - path: /
+          pathType: Prefix
+  annotations:
+    # type of authentication
+    nginx.ingress.kubernetes.io/auth-type: basic
+    # prevent the controller from redirecting (308) to HTTPS
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    # name of the secret that contains the user/password definitions
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth
+    # message to display with an appropriate context why the authentication is required
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required '
+    # custom max body size for file uploading like backing image uploading
+
+  tls:
+    - secretName: wildcard.klucsik.fun-tls
+      hosts:
+        - pgadmin.klucsik.fun
+
+persistentVolume:
+  storageClass: longhorn-2
+
+env:
+  email: klucsik@klucsik.fun
+  password: '{{ admin_password }}'

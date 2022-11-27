@@ -1,0 +1,52 @@
+#helm repo add nextcloud https://nextcloud.github.io/helm/
+#helm upgrade --install -f nextcloud/values.yaml --namespace=tarolo --create-namespace tarolo nextcloud/nextcloud
+#helm uninstall --namespace=tarolo tarolo
+
+#open shell to container then: su -s /bin/bash www-data
+# kubectl cp tarolo/tarolo-nextcloud-7f776b6948-6pnj7:/var/www/html/data/nextcloud.db ./nextcloud-backup/20220907/
+ingress:
+  enabled: true
+  className: public
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 10G
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  tls:
+    - secretName: wildcard.klucsik.fun-tls
+      hosts:
+        - tarolo.klucsik.fun
+  path: /
+  pathType: Prefix
+
+nextcloud:
+  host: tarolo.klucsik.fun
+  username: klucsik
+  password: '{{ admin_password }}'
+
+persistence:
+  enabled: true
+  storageClass: longhorn-2 #I updated the replicacount manually in longhorn
+  size: 800Gi
+  retain: true
+  existingClaim: "tarolo-data"
+
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 300
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 30
+  successThreshold: 1
+
+image:
+  repository: nextcloud
+  tag: '{{ nexcloud_image_tag }}'
+  pullPolicy: IfNotPresent
+  # pullSecrets:
+  #   - myRegistrKeySecretName
+
+cronjob:
+  enabled: false
+
+# A config/config.phpba tedd bele :
+  #  'overwrite.cli.url' => 'http://tarolo.klucsik.fun',
+  #  'overwriteprotocol' => 'https',

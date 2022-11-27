@@ -1,0 +1,29 @@
+image:
+  repository: "linuxserver/piwigo"
+  tag: "12.2.0"
+replicaCount: 1
+mariadb:
+  deploy: true
+  persistence:
+    storageClass: "longhorn-2"
+ingress:
+  enabled: true
+  class: public
+  hosts:
+    - kepek.klucsik.hu
+    - kepek.klucsik.fun
+  tls:
+    - secretName: wildcard.klucsik.fun-tls
+      hosts:
+        - kepek.klucsik.fun
+persistence:
+  data:
+    enabled: true
+    storageClass: "longhorn-3"
+    size: 60Gi
+    accessMode: ReadWriteOnce
+  config:
+    enabled: true
+    storageClass: "longhorn-2"
+    size: 4Gi
+    accessMode: ReadWriteOnce

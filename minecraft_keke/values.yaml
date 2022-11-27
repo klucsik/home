@@ -1,0 +1,44 @@
+# https://github.com/itzg/minecraft-server-charts/blob/master/charts/minecraft/values.yaml
+minecraftServer:
+  eula: true
+  type: "BUKKIT"
+  motd: "Welcome to Keke's World!"
+  onlineMode: false
+  serviceType: NodePort
+  nodePort: 30999
+  version: 1.18.2
+  difficulty: normal
+  #whitelist: Geriboys, DG_Eddie, Noxin, Adimra, klucsik #not wroking yet, made manually
+  ops: Geriboys,DG_Eddie,Noxin,Adimra,klucsik #not wroking yxet, amde manually
+  overrideServerProperties: false
+  memory: 1500M
+  rcon:
+    # If you enable this, make SURE to change your password below.
+    enabled: true
+    port: 25575
+    password: "UM2TspcX&H+=@gb3s7hEt"
+    secretKey: rcon-password
+    serviceType: ClusterIP
+
+nodeSelector:
+  function: builder
+
+
+persistence:
+  storageClass: "longhorn-2"
+  dataDir:
+    enabled: true
+    Size: 4Gi
+
+
+
+mcbackup:
+  enabled: true
+  backupInterval: 24h
+  pruneBackupsDays: 30
+  persistence:
+    storageClass: "longhorn-2"
+    backupDir:
+      enabled: true
+      Size: 20Gi
+

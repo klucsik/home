@@ -1,0 +1,15 @@
+domain: mail.klucsik.fun
+hostnames:
+- mail.klucsik.fun
+initialAccount:
+  domain: mail.klucsik.fun
+  password: chang3m3!
+  username: mailadmin
+logLevel: INFO
+mail:
+  authRatelimit: 100/minute;3600/hour
+  messageSizeLimitInMegabytes: 1
+persistence:
+  size: 10Gi
+  storageClass: local-bazooka-precious1g
+secretKey: chang3m3!
