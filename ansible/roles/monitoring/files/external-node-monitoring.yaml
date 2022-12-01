@@ -5,9 +5,7 @@ metadata:
   name: external-node-metrics
   namespace: monitoring
   labels:
-    app.kubernetes.io/component: exporter
     app.kubernetes.io/name: external-node-exporters
-    app.kubernetes.io/part-of: kube-prometheus
 spec:
  type: ClusterIP
  ports:
@@ -23,6 +21,9 @@ metadata:
 subsets:
   - addresses:
       - ip: 192.168.100.144
+        nodeName: ikerone
+      - ip: 192.168.100.1
+        nodeName: router
     ports: 
       - name: metrics
         port: 9100
@@ -33,6 +34,8 @@ kind: ServiceMonitor
 metadata:
   name: external-node-metrics
   namespace: monitoring
+  labels:
+    release: prometheus-stack
 spec:
   endpoints:
     - interval: 15s
@@ -41,6 +44,4 @@ spec:
   jobLabel: app.kubernetes.io/name
   selector:
     matchLabels:
-      app.kubernetes.io/component: exporter
       app.kubernetes.io/name: external-node-exporters
-      app.kubernetes.io/part-of: kube-prometheus
