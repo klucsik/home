@@ -1,0 +1,35 @@
+# ---
+# # tasks file for monitoring
+# - name: Deploy resources
+#   kubernetes.core.k8s:
+#     state: present
+#     namespace: monitoring
+#     src: '{{ item }}'
+#   with_items:
+#     - files/grafana-ingress.yaml
+#     - files/prometheus-storage.yaml
+#     - files/ikerone-monitoring.yaml
+
+- name: Add chart repo
+  kubernetes.core.helm_repository:
+    name: prometheus-community
+    repo_url: "https://prometheus-community.github.io/helm-charts"
+
+- name: Deploy Prometheus stack
+  kubernetes.core.helm:
+    name: prometheus-stack
+    state: present
+    chart_ref: prometheus-community/kube-prometheus-stack
+    chart_version: 42.1.0
+    values: "{{ lookup('template', 'values.yaml.j2') | from_yaml  }}"
+    release_namespace: monitoring
+    create_namespace: true
+
+# tasks file for monitoring
+- name: Deploy resources
+  kubernetes.core.k8s:
+    state: present
+    namespace: monitoring
+    src: '{{ item }}'
+  with_items:
+    - files/external-node-monitoring.yaml

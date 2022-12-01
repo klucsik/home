@@ -26,6 +26,7 @@
   - registry
   - jenkins
   - pgadmin
+  - monitoring
 
 - name: Deploy yrelia wiki instance
   hosts: localhost

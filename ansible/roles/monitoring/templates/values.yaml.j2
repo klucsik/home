@@ -1,0 +1,67 @@
+grafana:
+  adminPassword: '{{ grafana_password }}'
+
+  ingress:
+    enabled: true
+    ingressClassName: public
+    hosts:
+      - grafana.klucsik.fun
+    tls:
+      - secretName: wildcard.klucsik.fun-tls
+        hosts:
+          - grafana.klucsik.fun
+
+alertmanager:
+
+  ingress:
+    enabled: true
+    ingressClassName: public
+    hosts:
+      - alertmanager.klucsik.fun
+    tls:
+      - secretName: wildcard.klucsik.fun-tls
+        hosts:
+          - alertmanager.klucsik.fun
+  storage: 
+    volumeClaimTemplate:
+      spec:
+         storageClassName: longhorn-2
+         accessModes: ["ReadWriteOnce"]
+         resources:
+            requests:
+              storage: 10Gi
+
+kubeEtcd:
+  enabled: false
+
+prometheusSpec:
+  storageSpec:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: longhorn-2
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 20Gi
+  ingress:
+    enabled: true
+    ingressClassName: public
+    hosts:
+      - prometheus.klucsik.fun
+    paths:
+      - /
+    tls:
+      - secretName: wildcard.klucsik.fun-tls
+        hosts:
+        - prometheus.klucsik.fun   
+
+prometheus-node-exporter:
+  service:
+    portName: http-metrics
+  prometheus:
+    monitor:
+      enabled: true
+
+
+
+
