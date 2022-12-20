@@ -3,6 +3,15 @@
   roles:
   - longhorn
 
+- name: Deploy rosurces which doesn't need specific vars
+  hosts: localhost
+  roles:
+  - monitoring
+  - tarolo
+  - registry
+  - jenkins
+  - pgadmin
+  
 - name: Deploy bazs foundry instance
   hosts: localhost
   roles:
@@ -18,15 +27,6 @@
   vars_files:
   - roles/foundry/vars/gyongy-vault.yaml
   - roles/foundry/vars/gyongy.yaml
-
-- name: Deploy rosurces which doesn't need specific vars
-  hosts: localhost
-  roles:
-  - tarolo
-  - registry
-  - jenkins
-  - pgadmin
-  - monitoring
 
 - name: Deploy yrelia wiki instance
   hosts: localhost

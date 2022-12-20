@@ -16,36 +16,58 @@ alertmanager:
   ingress:
     enabled: true
     ingressClassName: public
+    annotations:
+      # type of authentication
+      nginx.ingress.kubernetes.io/auth-type: basic
+      # prevent the controller from redirecting (308) to HTTPS
+      nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+      # name of the secret that contains the user/password definitions
+      nginx.ingress.kubernetes.io/auth-secret: basic-auth
+      # message to display with an appropriate context why the authentication is required
+      nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
     hosts:
       - alertmanager.klucsik.fun
     tls:
       - secretName: wildcard.klucsik.fun-tls
         hosts:
           - alertmanager.klucsik.fun
-  storage: 
-    volumeClaimTemplate:
-      spec:
-         storageClassName: longhorn-2
-         accessModes: ["ReadWriteOnce"]
-         resources:
-            requests:
-              storage: 10Gi
+  alertmanagerSpec:
+    storage: 
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn-2
+          accessModes: ["ReadWriteOnce"]
+          resources:
+              requests:
+                storage: 10Gi
 
 kubeEtcd:
   enabled: false
 
-prometheusSpec:
-  storageSpec:
-    volumeClaimTemplate:
-      spec:
-        storageClassName: longhorn-2
-        accessModes: ["ReadWriteOnce"]
-        resources:
-          requests:
-            storage: 20Gi
+prometheus:
+  prometheusSpec:
+    retention: 30d
+    retentionSize: 30GB
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn-2
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 40Gi
   ingress:
     enabled: true
     ingressClassName: public
+    annotations:
+      # type of authentication
+      nginx.ingress.kubernetes.io/auth-type: basic
+      # prevent the controller from redirecting (308) to HTTPS
+      nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+      # name of the secret that contains the user/password definitions
+      nginx.ingress.kubernetes.io/auth-secret: basic-auth
+      # message to display with an appropriate context why the authentication is required
+      nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
     hosts:
       - prometheus.klucsik.fun
     paths:
@@ -54,10 +76,3 @@ prometheusSpec:
       - secretName: wildcard.klucsik.fun-tls
         hosts:
         - prometheus.klucsik.fun   
-
-prometheus-node-exporter:
-  service:
-    portName: http-metrics
-  prometheus:
-    monitor:
-      enabled: true
