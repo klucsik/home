@@ -1,0 +1,4 @@
+- name: Deploy rosurces which doesn't need specific vars
+  hosts: localhost
+  roles:
+  - minecraft-bedrock-server

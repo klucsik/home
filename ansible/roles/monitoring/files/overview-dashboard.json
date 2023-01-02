@@ -24,10 +24,111 @@
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
-    "id": 27,
+    "id": 26,
     "links": [],
     "liveNow": false,
     "panels": [
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "displayMode": "auto",
+              "filterable": false,
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 4,
+        "options": {
+          "footer": {
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "frameIndex": 1,
+          "showHeader": true
+        },
+        "pluginVersion": "9.2.4",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "builder",
+            "exemplar": false,
+            "expr": "node_filesystem_size_bytes{mountpoint=\"/data\"}",
+            "format": "table",
+            "instant": true,
+            "legendFormat": "{{instance}}",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "builder",
+            "exemplar": false,
+            "expr": "node_filesystem_free_bytes{mountpoint=\"/data\"}",
+            "format": "table",
+            "hide": false,
+            "instant": false,
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Panel Title",
+        "transformations": [
+          {
+            "id": "groupBy",
+            "options": {
+              "fields": {
+                "instance": {
+                  "aggregations": [
+                    "lastNotNull"
+                  ],
+                  "operation": "aggregate"
+                }
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
       {
         "datasource": {
           "type": "prometheus",
@@ -89,7 +190,7 @@
           "h": 9,
           "w": 12,
           "x": 0,
-          "y": 0
+          "y": 8
         },
         "id": 2,
         "options": {
@@ -112,13 +213,12 @@
             },
             "editorMode": "builder",
             "expr": "node_load5",
-            "hide": false,
             "legendFormat": "{{instance}}",
             "range": true,
             "refId": "A"
           }
         ],
-        "title": "load5",
+        "title": "Node Load",
         "type": "timeseries"
       }
     ],
@@ -134,8 +234,8 @@
     },
     "timepicker": {},
     "timezone": "",
-    "title": "overview",
-    "uid": "MPbp47FVz",
-    "version": 1,
+    "title": "Overview",
+    "uid": "ILqPGOF4z",
+    "version": 2,
     "weekStart": ""
   }

@@ -8,7 +8,7 @@ python3 -m pip install -r ./ansible/requirements.txt
 ansible-galaxy install -r ansible/requirements.yaml
 
 # Running:
- ansible-playbook ./ansible/playbook.yaml --ask-vault-pass
+ansible-playbook ./ansible/playbook.yaml --ask-vault-pass
 
  # Encrypt/Decrypt vaultes files
 ansible-vault decrypt ansible/roles/foundry/vars/gyongy-vault.yaml ansible/roles/foundry/vars/bazs-vault.yaml ansible/roles/tls-secret/vars/dotfun_vault.yaml

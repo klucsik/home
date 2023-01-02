@@ -1,0 +1,15 @@
+
+- name: Add chart repo
+  kubernetes.core.helm_repository:
+    name: itzg
+    repo_url: "https://itzg.github.io/minecraft-server-charts/"
+
+- name: Deploy minecraft instance
+  kubernetes.core.helm:
+    name: minecraft-bedrock-keke
+    state: present
+    chart_ref: itzg/minecraft-bedrock
+    chart_version: 2.0.1
+    values: "{{ lookup('file', 'values.yaml') | from_yaml  }}"
+    release_namespace: '{{ minecraft_namespace }}'
+    create_namespace: true

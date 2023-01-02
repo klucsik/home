@@ -1,0 +1,16 @@
+
+minecraftServer:
+  eula: true
+  motd: "Üdv Keke szerverén!"
+  onlineMode: true
+  serviceType: NodePort
+  nodePort: 30665
+
+persistence:
+  storageClass: "longhorn-2"
+  dataDir:
+    enabled: true
+    Size: 4Gi
+
+nodeSelector:
+  kubernetes.io/arch: amd64

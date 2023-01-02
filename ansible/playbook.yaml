@@ -11,6 +11,7 @@
   - registry
   - jenkins
   - pgadmin
+  - minecraft-bedrock-server
   
 - name: Deploy bazs foundry instance
   hosts: localhost
@@ -34,6 +35,7 @@
   - wikijs
   vars_files:
   - roles/wikijs/vars/yrelia-vars.yml
+  - roles/wikijs/vars/gyongy-vars.yml
 
 - name: Deploy tls certs
   hosts: localhost
