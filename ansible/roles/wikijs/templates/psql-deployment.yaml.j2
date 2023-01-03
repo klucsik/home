@@ -53,7 +53,7 @@ spec:
       volumes:
         - name: postgredb
           persistentVolumeClaim:
-            claimName: wiki-db
+            claimName: {{ instance_name }}-wiki-db
 ---
 
 apiVersion: v1

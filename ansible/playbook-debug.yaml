@@ -1,4 +1,6 @@
-- name: Deploy rosurces which doesn't need specific vars
+- name: Deploy yrelia wiki instance
   hosts: localhost
   roles:
-  - minecraft-bedrock-server
+  - wikijs
+  vars_files:
+  - roles/wikijs/vars/yrelia-vars.yml

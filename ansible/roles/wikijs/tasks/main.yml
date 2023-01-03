@@ -17,4 +17,4 @@
   kubernetes.core.k8s:
     state: present
     namespace: '{{ instance_name }}-wiki'
-    src: files/psql-deployment.yaml
+    template: templates/psql-deployment.yaml.j2
